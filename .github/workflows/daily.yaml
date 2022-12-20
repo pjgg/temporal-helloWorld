@@ -1,0 +1,36 @@
+name: "Daily Build"
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 23 * * *'
+jobs:
+  linux-build-jvm-latest:
+    name: Daily - Linux - JVM build - Latest Version
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 17 ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Reclaim Disk Space
+        run: .github/ci-prerequisites.sh
+      - name: Install JDK {{ matrix.java }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+          check-latest: true
+          cache: 'maven'
+      - name: Test in JVM mode
+        run: |
+          mvn -fae -V -B -s .github/mvn-settings.xml -fae clean test
+      - name: Zip Artifacts
+        if: failure()
+        run: |
+          zip -R artifacts-jvm${{ matrix.java }}.zip '*-reports/*'
+      - name: Archive artifacts
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: ci-artifacts
+          path: artifacts-jvm${{ matrix.java }}.zip
