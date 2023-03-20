@@ -15,7 +15,7 @@
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
         <xml-format-maven-plugin.version>3.2.2</xml-format-maven-plugin.version>
-        <checkstyle.version>10.5.0</checkstyle.version>
+        <checkstyle.version>10.9.2</checkstyle.version>
         <impsort-maven-plugin.version>1.8.0</impsort-maven-plugin.version>
         <temporal-sdk.version>1.17.0</temporal-sdk.version>
         <!-- Default values for format -->
